@@ -10,12 +10,12 @@ namespace CashMastersPOSCore.Services
     public class CashMastersService : ICashMastersService
     {
         private readonly ILogger<CashMastersService> _log;
-        private readonly IConfiguration _configuration;                         
-        private List<Cash> cashChange;
+        private readonly IConfiguration _configuration;      
+
         /// <summary>
         /// Configurable currency
         /// </summary>
-        private Dictionary<string, decimal> CurrentCurrency => GetCurrency();
+        private Dictionary<string, decimal> CurrentCurrencyDictionary => SetCurrency();
 
         public CashMastersService(ILogger<CashMastersService> log,
             IConfiguration configuration)
@@ -23,11 +23,7 @@ namespace CashMastersPOSCore.Services
             _log = log;
             _configuration = configuration;
 
-            cashChange = new List<Cash>();
-            foreach (var currencyItem in CurrentCurrency)
-            {
-                cashChange.Add(new Cash() { Denomination = currencyItem.Key, Value = currencyItem.Value });
-            }
+            
         }
 
         /// <summary>
@@ -37,20 +33,23 @@ namespace CashMastersPOSCore.Services
         /// <returns></returns>
         public Change CashChange(Payment payment)
         {
-            Change cashChangeResult = null;
+            var cashChangeResult = new Change();
 
             try
             {
-                if (payment == null || payment.PaidCash < payment.Price)
+                if (payment == null 
+                    || payment.Price < 0 || payment.TotalPaid < 0
+                    || payment.TotalPaid < payment.Price)
                 {                    
-                    _log.LogWarning("Please, review your payment.");
-                    return cashChangeResult;
+                    _log.LogWarning($"Please, review your payment: Price = {payment?.Price} and total paid = {payment?.TotalPaid}");
+                    return null;
                 }
 
-                decimal totalChange = payment.PaidCash - payment.Price;
+                decimal totalChange = payment.TotalPaid - payment.Price;
                 decimal remainder = totalChange;
+                cashChangeResult.CashChange = InitializeCashListCurrency();
                 //Calculates of number of each bills and coins.
-                foreach (var cash in cashChange)
+                foreach (var cash in cashChangeResult.CashChange)
                 {
                     while (remainder >= cash.Value)
                     {
@@ -58,11 +57,6 @@ namespace CashMastersPOSCore.Services
                         remainder %= cash.Value;                        
                     }
                 }
-
-                cashChangeResult = new Change()
-                {
-                    CashChange = cashChange
-                };
             }
             catch(Exception ex)
             {
@@ -74,11 +68,26 @@ namespace CashMastersPOSCore.Services
         }
 
         /// <summary>
-        /// Gets the current currency depending on the configuration in the appsettings.
+        /// Initialize the Cash list with the current currency values.
+        /// </summary>
+        /// <returns></returns>
+        public List<Cash> InitializeCashListCurrency()
+        {
+            var cashList = new List<Cash>();
+            foreach (var currencyItem in CurrentCurrencyDictionary)
+            {
+                cashList.Add(new Cash() { Denomination = currencyItem.Key, Value = currencyItem.Value });
+            }
+
+            return cashList;
+        }
+
+        /// <summary>
+        /// Set the current currency depending on the configuration in the appsettings.
         /// Available currencies: MXN and US.
         /// </summary>
         /// <returns></returns>
-        private Dictionary<string, decimal> GetCurrency()
+        private Dictionary<string, decimal> SetCurrency()
         {
             string currency = _configuration["Currency"];
             var currencyDictionary = new Dictionary<string, decimal>();
@@ -92,9 +101,10 @@ namespace CashMastersPOSCore.Services
                 currencyDictionary.Add("2.00", 2.00m);
                 currencyDictionary.Add("1.00", 1.00m);
                 currencyDictionary.Add("0.50", 0.50m);
-                currencyDictionary.Add("0.20", 0.20m);
+                currencyDictionary.Add("0.25", 0.25m);
                 currencyDictionary.Add("0.10", 0.10m);
                 currencyDictionary.Add("0.05", 0.05m);
+                currencyDictionary.Add("0.01", 0.01m);
             }
             //Default currency == "MXN"
             else
@@ -107,13 +117,12 @@ namespace CashMastersPOSCore.Services
                 currencyDictionary.Add("2.00", 2.00m);
                 currencyDictionary.Add("1.00", 1.00m);
                 currencyDictionary.Add("0.50", 0.50m);
-                currencyDictionary.Add("0.25", 0.25m);
+                currencyDictionary.Add("0.20", 0.20m);
                 currencyDictionary.Add("0.10", 0.10m);
                 currencyDictionary.Add("0.05", 0.05m);
-                currencyDictionary.Add("0.01", 0.05m);
             }
 
             return currencyDictionary;
-        }
+        }        
     }    
 }

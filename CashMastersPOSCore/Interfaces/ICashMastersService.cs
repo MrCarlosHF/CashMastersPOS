@@ -6,5 +6,6 @@ namespace CashMastersPOSCore.Interfaces
     public interface ICashMastersService
     {
         Change CashChange(Payment payment);
+        List<Cash> InitializeCashListCurrency();
     }
 }

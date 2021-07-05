@@ -2,6 +2,7 @@
 using CashMastersPOSCore.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 
 namespace CashMastersPOS
 {
@@ -9,18 +10,34 @@ namespace CashMastersPOS
     public class Program
     {
         static void Main(string[] args)
-        {
-            var startup = new Startup();
-            var service = startup.ServiceProvider.GetRequiredService<ICashMastersService>();
+        {            
             try
             {
-                Console.Write("Item Price? ");
-                decimal price = Convert.ToDecimal(Console.ReadLine());
-                Console.Write("Paid cash? ");
-                decimal paid = Convert.ToDecimal(Console.ReadLine());
+                bool run = true;
+                var startup = new Startup();
+                var service = startup.ServiceProvider.GetRequiredService<ICashMastersService>();
 
-                Change change = service.CashChange(new Payment(price, paid));
-                DisplayCashChange(change);
+                while (run)
+                {
+                    List<Cash> paidCash = service.InitializeCashListCurrency();
+
+                    Console.Write("Item Price? ");
+                    decimal price = Convert.ToDecimal(Console.ReadLine());
+                    Console.Write($"Quantity of bills or coins paid with denomination of: \n\r");
+                    foreach (var cash in paidCash)
+                    {
+                        Console.Write($"{cash.Denomination} = ");
+                        cash.Quantity = Convert.ToInt32(Console.ReadLine());
+                    }
+
+
+                    Change change = service.CashChange(new Payment(price, paidCash));
+                    DisplayCashChange(change);
+
+                    Console.Write("Do you like to run it again? Yes[Y], NO[Other].");
+                    run = Console.ReadKey().Key == ConsoleKey.Y;
+                    Console.Clear();
+                }               
             }
             catch
             {
