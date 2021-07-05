@@ -40,9 +40,9 @@ It should be clear to any engineers that will be calling your routine in the fut
 
   Non-Function Requirements
 
-Write a C# .NET console app that demonstrates your working routine
-Provide comments to help future engineers use, and extend your function
-Unit tests should provide complete coverage of all key aspects of your function
-Common Objective Oriented principles should be applied
-Your routine should perform as fast as possible
-You need to have robust error handling with clearly documented exception definitions for caller of your routine
+Write a C# .NET console app that demonstrates your working routine.
+Provide comments to help future engineers use, and extend your function.
+Unit tests should provide complete coverage of all key aspects of your function.
+Common Objective Oriented principles should be applied.
+Your routine should perform as fast as possible.
+You need to have robust error handling with clearly documented exception definitions for caller of your routine.
