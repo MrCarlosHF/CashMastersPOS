@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CashMastersPOS", "CashMaste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashMastersPOSCore", "..\CashMastersPOSCore\CashMastersPOSCore.csproj", "{64FFB712-392C-4BBB-8AAE-12A192E9CB4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashMastersPOSCoreTest", "..\CashMastersPOSCoreTest\CashMastersPOSCoreTest.csproj", "{DED8B07D-2D35-4B10-9D8D-CC92F38CDD13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{64FFB712-392C-4BBB-8AAE-12A192E9CB4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64FFB712-392C-4BBB-8AAE-12A192E9CB4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64FFB712-392C-4BBB-8AAE-12A192E9CB4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DED8B07D-2D35-4B10-9D8D-CC92F38CDD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DED8B07D-2D35-4B10-9D8D-CC92F38CDD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DED8B07D-2D35-4B10-9D8D-CC92F38CDD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DED8B07D-2D35-4B10-9D8D-CC92F38CDD13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
