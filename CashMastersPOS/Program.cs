@@ -60,7 +60,10 @@ namespace CashMastersPOS
             Console.Write($"Total change: {change.TotalChange}\n\r");
             foreach (var cash in change.CashChange)
             {
-                Console.Write($"{cash.Denomination} x {cash.Quantity}\n\r");
+                if (cash.Quantity > 0)
+                {
+                    Console.Write($"{cash.Denomination} x {cash.Quantity}\n\r");
+                }
             }            
         }
     }

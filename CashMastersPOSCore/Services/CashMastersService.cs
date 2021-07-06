@@ -22,8 +22,6 @@ namespace CashMastersPOSCore.Services
         {
             _log = log;
             _configuration = configuration;
-
-            
         }
 
         /// <summary>
